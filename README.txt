@@ -5,7 +5,8 @@ Summary
    The [1]HTML Mail module works great to send HTML mails, but it is
    difficult to configure it to send multipart messages due to the
    dependencies involved. This module removes the extra effort and
-   requires no dependencies and no configuration.
+   requires no dependencies and no configuration. It improves the display
+   of the plaintext email messages received by your users.
 
 Quick Start
 
@@ -13,9 +14,11 @@ Quick Start
        HTML mails.
     2. Do not install or enable the PEAR mime classes integration.
     3. After you have it working, enable this module.
-    4. Resend your test message and view the email source. You should see
-       that the email is now encoded as Content-Type:
-       multipart/alternative
+    4. Resend your test message (/admin/config/system/htmlmail/test) and
+       view the email source. You should see that the email is now encoded
+       as Content-Type: multipart/alternative. In your email client try
+       viewing plain, viewing formatted, and viewing source to make
+       comparisons.
 
 Requirements
 

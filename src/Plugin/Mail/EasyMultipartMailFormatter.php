@@ -5,13 +5,11 @@ namespace Drupal\ez_multipart_mail\Plugin\Mail;
 use Drupal\htmlmail\Plugin\Mail\HtmlMailSystem;
 
 /**
- * Add multipart mail formatting without dependencies to the HTML Mail system.
+ * Add multipart mail formatting without dependencies to HtmlMailSystem.
  *
- * @Mail(
- *   id = "ez_multipart_mail",
- *   label = @Translation("Easy multipart MIME mail formatter"),
- *   description = @Translation("Adds no config, no dependency multipart MIME email formatting to the HTML mail module.")
- * )
+ * Note: This is not registered as a plugin because it extends the parent, if it
+ * were registered it would appear as it's own plugin, which is not the
+ * intention.
  *
  * @link https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
  */

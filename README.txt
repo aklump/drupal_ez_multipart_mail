@@ -45,9 +45,11 @@ Technically Speaking
 
 Contact The Developer
 
-   In the Loft Studios Aaron Klump - Web Developer
-   sourcecode@intheloftstudios.com 360.690.6432 PO Box 29294 Bellingham,
-   WA 98228-1294
+     * In the Loft Studios
+     * Aaron Klump - Web Developer
+     * sourcecode@intheloftstudios.com
+     * 360.690.6432
+     * PO Box 29294 Bellingham, WA 98228-1294
 
    [5]http://www.customdrupalmodules.com [6]https://github.com/aklump
 

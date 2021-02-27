@@ -1,4 +1,4 @@
-# Ez Multipart Mail
+# Easy Multipart Mail Drupal Module
 
 {% include('_overview.md') %}
 

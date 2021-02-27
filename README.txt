@@ -1,15 +1,15 @@
-                               Ez Multipart Mail
+                       Easy Multipart Mail Drupal Module
 
 Summary
 
-   The HTML Mail module works to send HTML mails, but it is difficult to
-   configure it to send multipart messages due to the dependencies
-   involved. This module removes that barrier and requires no dependencies
-   and no configuration.
+   The [1]HTML Mail module works great to send HTML mails, but it is
+   difficult to configure it to send multipart messages due to the
+   dependencies involved. This module removes the extra effort and
+   requires no dependencies and no configuration.
 
 Quick Start
 
-    1. Configure [1]HTML Mail module as necessary to successfully send
+    1. Configure [2]HTML Mail module as necessary to successfully send
        HTML mails.
     2. Do not install or enable the PEAR mime classes integration.
     3. After you have it working, enable this module.
@@ -19,11 +19,11 @@ Quick Start
 
 Requirements
 
-     * [2]HTML Mail module
+     * [3]HTML Mail module
 
 Contributing
 
-   If you find this project useful... please consider [3]making a donation
+   If you find this project useful... please consider [4]making a donation
    .
 
 Installation
@@ -46,12 +46,13 @@ Contact The Developer
    sourcecode@intheloftstudios.com 360.690.6432 PO Box 29294 Bellingham,
    WA 98228-1294
 
-   [4]http://www.customdrupalmodules.com [5]https://github.com/aklump
+   [5]http://www.customdrupalmodules.com [6]https://github.com/aklump
 
 References
 
    1. https://www.drupal.org/project/htmlmail
    2. https://www.drupal.org/project/htmlmail
-   3. https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4E5KZHDQCEUV8&item_name=Gratitude%20for%20aklump%2Fez_multipart_mail
-   4. http://www.customdrupalmodules.com/
-   5. https://github.com/aklump
+   3. https://www.drupal.org/project/htmlmail
+   4. https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4E5KZHDQCEUV8&item_name=Gratitude%20for%20aklump%2Fez_multipart_mail
+   5. http://www.customdrupalmodules.com/
+   6. https://github.com/aklump

@@ -1,10 +1,11 @@
-# Ez Multipart Mail
+# Easy Multipart Mail Drupal Module
 
 ## Summary
 
-The HTML Mail module works to send HTML mails, but it is difficult to configure
-it to send multipart messages due to the dependencies involved. This module
-removes that barrier and requires no dependencies and no configuration.
+The [HTML Mail module](https://www.drupal.org/project/htmlmail) works great to
+send HTML mails, but it is difficult to configure it to send multipart messages
+due to the dependencies involved. This module removes the extra effort and
+requires no dependencies and no configuration.
 
 ## Quick Start
 

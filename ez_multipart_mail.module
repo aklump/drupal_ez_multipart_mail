@@ -1,0 +1,10 @@
+<?php
+
+use Drupal\ez_multipart_mail\Plugin\Mail\EasyMultipartMailFormatter;
+
+/**
+ * Implements hook_mail_backend_info_alter().
+ */
+function ez_multipart_mail_mail_backend_info_alter(&$info) {
+  $info['htmlmail']['class'] = EasyMultipartMailFormatter::class;
+}

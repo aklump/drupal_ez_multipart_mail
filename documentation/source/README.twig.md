@@ -9,6 +9,5 @@
 * sourcecode@intheloftstudios.com
 * 360.690.6432
 * PO Box 29294 Bellingham, WA 98228-1294
-
-<http://www.customdrupalmodules.com>
-<https://github.com/aklump>
+* <http://www.customdrupalmodules.com>
+* <https://github.com/aklump>

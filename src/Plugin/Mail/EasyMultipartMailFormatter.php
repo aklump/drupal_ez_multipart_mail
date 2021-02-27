@@ -2,6 +2,7 @@
 
 namespace Drupal\ez_multipart_mail\Plugin\Mail;
 
+use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\htmlmail\Plugin\Mail\HtmlMailSystem;
 
 /**
@@ -57,10 +58,19 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
     $multipart_raw .= $eol . $eol . "--" . $boundary . $eol;
 
     // The un-formatted version.
-    $multipart_raw .= "Content-Type: " . $this->getContentType($unformatted) . $eol . $eol;
+    $unformatted_type = $this->getContentType($unformatted);
+    $multipart_raw .= "Content-Type: " . $unformatted_type . $eol . $eol;
+
+    // This comes from \Drupal\Core\Mail\Plugin\Mail\PhpMail::format.
     if (is_array($unformatted['body'])) {
       $unformatted['body'] = implode("$eol$eol", $unformatted['body']);
     }
+
+    if (strstr($unformatted_type, 'text/plain') !== FALSE) {
+      $unformatted['body'] = MailFormatHelper::htmlToText($unformatted['body']);
+      $unformatted['body'] = MailFormatHelper::wrapMail($unformatted['body']);
+    }
+
     $multipart_raw .= $unformatted['body'];
     $multipart_raw .= $eol . $eol . "--" . $boundary . $eol;
 
@@ -81,12 +91,12 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
    *   A message array per the drupal mail API.  Expecting the "headers" key.
    *
    * @return string
-   *   The content type if found.
+   *   The content type if found cast to lowercase.
    */
   private function getContentType(array $message): string {
     foreach ($message['headers'] ?? [] as $key => $value) {
       if (strtolower($key) === 'content-type') {
-        return $value;
+        return strtolower($value);
       }
     }
 

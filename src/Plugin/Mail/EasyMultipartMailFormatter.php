@@ -3,6 +3,8 @@
 namespace Drupal\ez_multipart_mail\Plugin\Mail;
 
 use Drupal\Core\Mail\MailFormatHelper;
+use Drupal\Core\Render\Markup;
+use Drupal\htmlmail\Helper\HtmlMailHelper;
 use Drupal\htmlmail\Plugin\Mail\HtmlMailSystem;
 
 /**
@@ -32,54 +34,53 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
    *   The formatted $message, ready for sending.
    */
   public function format(array $message) {
-    $unformatted = $message;
-    $formatted = parent::format($message);
+    $is_normalized = isset($message['body']['#type']) && 'ez_multipart_mail' === $message['body']['#type'];
+    if (!$is_normalized) {
+      $unformatted = $message;
+      $formatted = parent::format($message);
 
-    // We will only create a multipart message if the formatted version is not
-    // already multipart, because it's possible that the formatted version has
-    // already created a multipart message, depending on the settings and
-    // plugins that may or may not be present on this drupal install.
-    $formatted_type = $this->getContentType($formatted);
+      // We will only create a multipart message if the formatted version is not
+      // already multipart, because it's possible that the formatted version has
+      // already created a multipart message, depending on the settings and
+      // plugins that may or may not be present on this drupal install.
+      $formatted_type = $this->getContentType($formatted);
 
-    // "The Content-Type field for multipart entities requires one parameter,
-    // "boundary", which is used to specify the encapsulation boundary."
-    // @link https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html#z0
-    $is_multipart = strstr($formatted_type, 'boundary') !== FALSE;
-    if ($is_multipart) {
-      return $message;
+      // "The Content-Type field for multipart entities requires one parameter,
+      // "boundary", which is used to specify the encapsulation boundary."
+      // @link https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html#z0
+      $is_multipart = strstr($formatted_type, 'boundary') !== FALSE;
+      if ($is_multipart) {
+        return $message;
+      }
+
+      // This comes from \Drupal\Core\Mail\Plugin\Mail\PhpMail::format.
+      if (is_array($unformatted['body'])) {
+        $eol = $this->siteSettings->get('mail_line_endings', PHP_EOL);
+        $unformatted['body'] = implode("$eol$eol", $unformatted['body']);
+      }
+
+      $unformatted_type = $this->getContentType($unformatted);
+      if (strstr($unformatted_type, 'text/plain') !== FALSE) {
+        $unformatted['body'] = MailFormatHelper::htmlToText($unformatted['body']);
+      }
+
+      $message['body'] = [
+        '#type' => 'ez_multipart_mail',
+        '#plain' => Markup::create($unformatted['body']),
+        '#html' => Markup::create($formatted['body']),
+      ];
     }
 
-    $eol = $this->siteSettings->get('mail_line_endings', PHP_EOL);
-    $boundary = uniqid('np');
+    \Drupal::service('renderer')->renderPlain($message['body']);
 
-    $message['headers']['Content-Type'] = 'multipart/alternative;boundary="' . $boundary . '"';
-    $multipart_raw = '';
-    $multipart_raw .= 'This is a MIME encoded message.';
-    $multipart_raw .= $eol . $eol . "--" . $boundary . $eol;
-
-    // The un-formatted version.
-    $unformatted_type = $this->getContentType($unformatted);
-    $multipart_raw .= "Content-Type: " . $unformatted_type . $eol . $eol;
-
-    // This comes from \Drupal\Core\Mail\Plugin\Mail\PhpMail::format.
-    if (is_array($unformatted['body'])) {
-      $unformatted['body'] = implode("$eol$eol", $unformatted['body']);
+    if (HtmlMailHelper::htmlMailIsAllowed($message['to'])) {
+      $message['headers']['Content-Type'] = 'multipart/alternative;boundary="' . $message['body']['#boundary'] . '"';
+      $message['body'] = $message['body']['#children'];
     }
-
-    if (strstr($unformatted_type, 'text/plain') !== FALSE) {
-      $unformatted['body'] = MailFormatHelper::htmlToText($unformatted['body']);
-      $unformatted['body'] = MailFormatHelper::wrapMail($unformatted['body']);
+    else {
+      $message['body'] = $message['body']['#plain'];
+      $message['headers']['Content-Type'] = 'text/plain; charset=utf-8';
     }
-
-    $multipart_raw .= $unformatted['body'];
-    $multipart_raw .= $eol . $eol . "--" . $boundary . $eol;
-
-    // The formatted text/html version of the message.
-    $multipart_raw .= "Content-Type: " . $this->getContentType($formatted) . $eol . $eol;
-    $multipart_raw .= $formatted['body'];
-    $multipart_raw .= $eol . $eol . "--" . $boundary . "--";
-
-    $message['body'] = $multipart_raw;
 
     return $message;
   }

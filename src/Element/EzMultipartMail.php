@@ -2,11 +2,12 @@
 
 namespace Drupal\ez_multipart_mail\Element;
 
+use Drupal\Core\Asset\CssOptimizer;
+use Drupal\Core\Render\Element\RenderElement;
+use Drupal\ez_multipart_mail\RenderHelpers;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Xss;
-use Drupal\Core\Asset\CssOptimizer;
 use Drupal\Core\Mail\MailFormatHelper;
-use Drupal\Core\Render\Element\RenderElement;
 use Drupal\Core\Site\Settings;
 
 /**
@@ -34,24 +35,23 @@ class EzMultipartMail extends RenderElement {
       '#html' => [],
       '#attached' => [],
       '#pre_render' => [
-        [$class, 'ensureHasPlain'],
+        [$class, 'ensurePlainTextPart'],
         [$class, 'flattenArrays'],
-        [$class, 'filterAsNeeded'],
-        [$class, 'wrapMail'],
-        [$class, 'loadCss'],
-        [$class, 'applyThemes'],
+        [$class, 'filterAndFormat'],
+        [$class, 'getCssByAttached'],
+        [$class, 'applyTemplates'],
       ],
     ];
   }
 
   /**
-   * Create the plaintext version if not exists.
+   * Create the plaintext version if it doesn't exist.
    *
    * @param $element
    *
    * @return mixed
    */
-  public static function ensureHasPlain(array $element) {
+  public static function ensurePlainTextPart(array $element) {
     if (empty($element['#plain'])) {
       $element['#plain'] = strval($element['#html']);
     }
@@ -60,7 +60,7 @@ class EzMultipartMail extends RenderElement {
   }
 
   /**
-   * Flatten array bodies.
+   * Flatten messages if they are arrays.
    *
    * @param array $element
    *
@@ -68,30 +68,28 @@ class EzMultipartMail extends RenderElement {
    */
   public static function flattenArrays(array $element) {
     $eol = Settings::get('mail_line_endings', PHP_EOL);
-    $do_flatten = function (&$subject) use ($eol) {
-      // This comes from \Drupal\Core\Mail\Plugin\Mail\PhpMail::format.
-      if (is_array($subject)) {
-        $subject = implode("$eol$eol", $subject);
+    $do_flatten = function (&$subject, $key) use ($eol) {
+      if (isset($subject[$key]) && is_array($subject[$key])) {
+        $subject[$key] = implode("$eol$eol", $subject[$key]);
       }
-
-      return $subject;
     };
-    $do_flatten($element['#plain']);
-    $do_flatten($element['#html']);
+    $do_flatten($element, '#plain');
+    $do_flatten($element, '#html');
 
     return $element;
   }
 
   /**
-   * Filter XSS unless bodies are instances of MarkupInterface.
+   * Apply filtering and formatting if not instances of MarkupInterface.
    *
    * @param array $element
    *
    * @return array
    */
-  public static function filterAsNeeded(array $element) {
+  public static function filterAndFormat(array $element) {
     if (!$element['#plain'] instanceof MarkupInterface) {
       $element['#plain'] = MailFormatHelper::htmlToText($element['#plain']);
+      $element['#plain'] = MailFormatHelper::formatPlain($element['#plain']);
     }
     if (!$element['#html'] instanceof MarkupInterface) {
       $element['#html'] = Xss::filter($element['#html']);
@@ -101,54 +99,37 @@ class EzMultipartMail extends RenderElement {
   }
 
   /**
-   * Wrap to mail line lengths.
+   * Add all attached CSS as #css.
    *
-   * @param $element
+   * @param array $element
    *
-   * @return mixed
+   * @return array
    */
-  public static function wrapMail(array $element) {
-    $element['#plain'] = MailFormatHelper::wrapMail($element['#plain']);
+  public static function getCssByAttached(array $element) {
+    $element['#css'] = '';
+    if (!empty($element['#attached']['library'])) {
+      foreach ($element['#attached']['library'] as $library_name) {
+        [$extension, $name] = explode('/', $library_name, 2);
+        $definition = \Drupal::service('library.discovery')
+          ->getLibraryByName($extension, $name);
+        foreach ($definition['css'] as $css) {
+          $css_optimizer = new CssOptimizer(\Drupal::service('file_url_generator'));
+          $element['#css'] .= $css_optimizer->loadFile($css['data']);
+        }
+      }
+    }
 
     return $element;
   }
 
   /**
-   * Get the CSS style tag from any attached libraries.
+   * Render plain and HTML using the templates.
    *
    * @param array $element
    *
-   * @return string
-   *   The styles for the email <style>...
+   * @return array
    */
-  public static function getStyles(array $element): string {
-    if (empty($element['#attached']['library'])) {
-      return '';
-    }
-    $build = [];
-    foreach ($element['#attached']['library'] as $library_name) {
-      [$extension, $name] = explode('/', $library_name, 2);
-      $definition = \Drupal::service('library.discovery')
-        ->getLibraryByName($extension, $name);
-      foreach ($definition['css'] as $css) {
-        $css_optimizer = new CssOptimizer(\Drupal::service('file_url_generator'));
-        $build[] = $css_optimizer->loadFile($css['data']);
-      }
-    }
-    if (empty($build)) {
-      return '';
-    }
-
-    return trim(implode('', $build));
-  }
-
-  public static function loadCss(array $element) {
-    $element['#css'] = static::getStyles($element);
-
-    return $element;
-  }
-
-  public static function applyThemes(array $element) {
+  public static function applyTemplates(array $element) {
     $child = array_diff_key($element, array_flip([
       '#pre_render',
       '#post_render',

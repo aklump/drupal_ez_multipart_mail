@@ -50,7 +50,7 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
       // "The Content-Type field for multipart entities requires one parameter,
       // "boundary", which is used to specify the encapsulation boundary."
       // @link https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html#z0
-      $is_multipart = strstr($formatted_type, 'boundary') !== FALSE;
+      $is_multipart = strstr($formatted_type, 'boundary=') !== FALSE;
       if ($is_multipart) {
         return $message;
       }
@@ -74,6 +74,8 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
     }
 
     // This step applies all the pre/post processing to our render element.
+    // Rather than use #children, we are going to cherry-pick #plain and #html
+    // instead.
     \Drupal::service('renderer')->renderPlain($message['body']);
 
     if (HtmlMailHelper::htmlMailIsAllowed($message['to'])) {

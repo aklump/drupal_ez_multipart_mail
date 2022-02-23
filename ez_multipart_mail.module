@@ -29,5 +29,7 @@ function template_preprocess_ez_multipart_html(array &$vars) {
   $element = $vars['element'];
   $vars['css'] = $element['#css'];
   $vars['message'] = $element['#html'];
+  $vars['bem_block'] = $element['#bem_block'];
+  $vars['attributes'] = new \Drupal\Core\Template\Attribute($element['#attributes']);
 }
 

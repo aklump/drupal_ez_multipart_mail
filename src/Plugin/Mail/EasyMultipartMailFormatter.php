@@ -79,11 +79,16 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
     \Drupal::service('renderer')->renderPlain($message['body']);
 
     if (HtmlMailHelper::htmlMailIsAllowed($message['to'])) {
-      $part = new AlternativePart(
+      $html_part = strval($message['body']['#html']);
+      if ($this->configVariables->get('debug')) {
+        print $html_part;
+        die;
+      }
+      $combined = new AlternativePart(
         new TextPart(strval($message['body']['#plain'])),
-        new TextPart(strval($message['body']['#html']), NULL, 'html')
+        new TextPart($html_part, NULL, 'html')
       );
-      $message['body'] = $part->bodyToString();
+      $message['body'] = $combined->bodyToString();
       preg_match('/\-\-(.+)\S/', $message['body'], $matches);
       if (empty($matches[1])) {
         throw new \RuntimeException('Missing boundary; cannot format email.');

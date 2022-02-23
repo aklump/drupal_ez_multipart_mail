@@ -33,6 +33,8 @@ class EzMultipartMail extends RenderElement {
     return [
       '#plain' => [],
       '#html' => [],
+      '#bem_block' => 'email',
+      '#attributes' => [],
       '#attached' => [],
       '#pre_render' => [
         [$class, 'ensurePlainTextPart'],

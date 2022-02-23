@@ -6,6 +6,8 @@ use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Render\Markup;
 use Drupal\htmlmail\Helper\HtmlMailHelper;
 use Drupal\htmlmail\Plugin\Mail\HtmlMailSystem;
+use Symfony\Component\Mime\Part\Multipart\AlternativePart;
+use Symfony\Component\Mime\Part\TextPart;
 
 /**
  * Add multipart mail formatting without dependencies to HtmlMailSystem.
@@ -71,11 +73,20 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
       ];
     }
 
+    // This step applies all the pre/post processing to our render element.
     \Drupal::service('renderer')->renderPlain($message['body']);
 
     if (HtmlMailHelper::htmlMailIsAllowed($message['to'])) {
-      $message['headers']['Content-Type'] = 'multipart/alternative;boundary="' . $message['body']['#boundary'] . '"';
-      $message['body'] = $message['body']['#children'];
+      $part = new AlternativePart(
+        new TextPart(strval($message['body']['#plain'])),
+        new TextPart(strval($message['body']['#html']), NULL, 'html')
+      );
+      $message['body'] = $part->bodyToString();
+      preg_match('/\-\-(.+)\S/', $message['body'], $matches);
+      if (empty($matches[1])) {
+        throw new \RuntimeException('Missing boundary; cannot format email.');
+      }
+      $message['headers']['Content-Type'] = 'multipart/alternative;boundary="' . $matches[1] . '"';
     }
     else {
       $message['body'] = $message['body']['#plain'];

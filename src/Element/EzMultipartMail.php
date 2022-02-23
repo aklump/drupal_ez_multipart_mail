@@ -4,6 +4,7 @@ namespace Drupal\ez_multipart_mail\Element;
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Asset\CssOptimizer;
 use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Render\Element\RenderElement;
 use Drupal\Core\Site\Settings;
@@ -37,36 +38,10 @@ class EzMultipartMail extends RenderElement {
         [$class, 'flattenArrays'],
         [$class, 'filterAsNeeded'],
         [$class, 'wrapMail'],
-        [$class, 'mimeEncodeChildren'],
+        [$class, 'loadCss'],
+        [$class, 'applyThemes'],
       ],
     ];
-  }
-
-  /**
-   * Create #children as mime-encoded string.
-   *
-   * @param $element
-   *   Fill in #children with the mime encoded message.
-   *   Fill in #boundary to be used in the header.
-   *
-   * @return array
-   *   The render array.
-   */
-  public static function mimeEncodeChildren($element) {
-    $element['#boundary'] = uniqid('np');
-
-    $eol = Settings::get('mail_line_endings', PHP_EOL);
-    $element['#children'] = '';
-    $element['#children'] .= 'This is a MIME encoded message.';
-    $element['#children'] .= $eol . $eol . "--" . $element['#boundary'] . $eol;
-    $element['#children'] .= "Content-Type: text/plain;charset=utf-8" . $eol . $eol;
-    $element['#children'] .= $element['#plain'];
-    $element['#children'] .= $eol . $eol . "--" . $element['#boundary'] . $eol;
-    $element['#children'] .= "Content-Type: text/html;charset=utf-8" . $eol . $eol;
-    $element['#children'] .= $element['#html'];
-    $element['#children'] .= $eol . $eol . "--" . $element['#boundary'] . "--";
-
-    return $element;
   }
 
   /**
@@ -76,7 +51,7 @@ class EzMultipartMail extends RenderElement {
    *
    * @return mixed
    */
-  public static function ensureHasPlain($element) {
+  public static function ensureHasPlain(array $element) {
     if (empty($element['#plain'])) {
       $element['#plain'] = strval($element['#html']);
     }
@@ -91,7 +66,7 @@ class EzMultipartMail extends RenderElement {
    *
    * @return array
    */
-  public static function flattenArrays($element) {
+  public static function flattenArrays(array $element) {
     $eol = Settings::get('mail_line_endings', PHP_EOL);
     $do_flatten = function (&$subject) use ($eol) {
       // This comes from \Drupal\Core\Mail\Plugin\Mail\PhpMail::format.
@@ -114,7 +89,7 @@ class EzMultipartMail extends RenderElement {
    *
    * @return array
    */
-  public static function filterAsNeeded($element) {
+  public static function filterAsNeeded(array $element) {
     if (!$element['#plain'] instanceof MarkupInterface) {
       $element['#plain'] = MailFormatHelper::htmlToText($element['#plain']);
     }
@@ -132,9 +107,60 @@ class EzMultipartMail extends RenderElement {
    *
    * @return mixed
    */
-  public static function wrapMail($element) {
+  public static function wrapMail(array $element) {
     $element['#plain'] = MailFormatHelper::wrapMail($element['#plain']);
-    $element['#html'] = MailFormatHelper::wrapMail($element['#html']);
+
+    return $element;
+  }
+
+  /**
+   * Get the CSS style tag from any attached libraries.
+   *
+   * @param array $element
+   *
+   * @return string
+   *   The styles for the email <style>...
+   */
+  public static function getStyles(array $element): string {
+    if (empty($element['#attached']['library'])) {
+      return '';
+    }
+    $build = [];
+    foreach ($element['#attached']['library'] as $library_name) {
+      [$extension, $name] = explode('/', $library_name, 2);
+      $definition = \Drupal::service('library.discovery')
+        ->getLibraryByName($extension, $name);
+      foreach ($definition['css'] as $css) {
+        $css_optimizer = new CssOptimizer(\Drupal::service('file_url_generator'));
+        $build[] = $css_optimizer->loadFile($css['data']);
+      }
+    }
+    if (empty($build)) {
+      return '';
+    }
+
+    return trim(implode('', $build));
+  }
+
+  public static function loadCss(array $element) {
+    $element['#css'] = static::getStyles($element);
+
+    return $element;
+  }
+
+  public static function applyThemes(array $element) {
+    $child = array_diff_key($element, array_flip([
+      '#pre_render',
+      '#post_render',
+    ]));
+
+    $build = ['#theme' => 'ez_multipart_html'] + $child;
+    $element['#html'] = \Drupal::service('renderer')
+      ->renderPlain($build);
+
+    $build = ['#theme' => 'ez_multipart_plain'] + $child;
+    $element['#plain'] = \Drupal::service('renderer')
+      ->renderPlain($build);
 
     return $element;
   }

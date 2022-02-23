@@ -1,16 +1,17 @@
 ## Summary
 
-The [HTML Mail module](https://www.drupal.org/project/htmlmail) works great to send HTML mails, but it is difficult to configure it to send multipart messages due to the dependencies involved ([Mail MIME](https://www.drupal.org/project/mailmime), [Pear](https://pear.php.net/package/Mail_Mime)) . This module removes the extra effort and requires no dependencies and no configuration to allow for multipart messages. It improves the display of the plaintext email messages received by your users because they are sent as both HTML and plaintext as soon as this module is enabled.
+The [HTML Mail module](https://www.drupal.org/project/htmlmail) works great to send HTML mails, but it is difficult to configure it to send multipart messages due to the dependencies involved ([Mail MIME](https://www.drupal.org/project/mailmime), [Pear](https://pear.php.net/package/Mail_Mime)) . This module removes the extra effort and requires no dependencies and no configuration to allow for multipart messages which are HTML and plaintext. It improves the display of the plaintext email messages received by your users because they are sent as both HTML and plaintext as soon as this module is enabled.
 
-This module provides a render element, which developers can use to generate HTML + text emails very easily at the code level. @see `\Drupal\ez_multipart_mail\Element\EzMultipartMail`.
+It is not a complete multipart solution, because it doesn't support attachments.
+
+This module provides a render element, which developers can use to generate HTML + text emails very easily at the code level. @see `\Drupal\ez_multipart_mail\Element\EzMultipartMail`. The HTML and plaintext versions of are independently themed using separate templates files: _ez-multipart-html.html.twig_ and _ez-multipart-plain.html.twig_.
 
 ## Reasons to Enable this Module
 
 * You can't or don't want to install the [Mail MIME](https://www.drupal.org/project/mailmime) module due to it's dependency on the Pear package, but you still want to send multipart MIME mails.
-* As a developer, you want to send HTML emails without involving the theme system.
+* As a developer, you want to send HTML emails without involving your theme.
 * You need to send HTML emails where `$message['body']` has HTML that will not be filtered or touched by the mail system.
 * You need to control plain and HTML versions separately.
-* You want to send HTML emails without involving the theme system.
 
 ## Quick Start
 
@@ -22,6 +23,8 @@ This module provides a render element, which developers can use to generate HTML
 ## Requirements
 
 * [HTML Mail module](https://www.drupal.org/project/htmlmail)
+* Tested on Drupal 9
+* Not yet tested on Drupal 8
 
 ## Contributing
 
@@ -29,9 +32,16 @@ If you find this project useful... please consider [making a donation](https://w
 .
 
 ## Installation
-
-1. Install as you would any Drupal module.
-1. There are no configurations.
+1. Save this module to _web/modules/custom/_.
+2. Add the following to root-level _composer.json_, `repositories`
+    ```json
+    {
+        "type": "path",
+        "url": "web/modules/custom/ez_multipart_mail"
+    } 
+    ```
+3. Run `composer require drupal/ez_multipart_mail:@dev`
+4. Enable the module.
 
 ## Technically Speaking
 
@@ -52,6 +62,10 @@ $message['body'] = [
 ```
 
 You can see that you have absolute control of both HTML and plain. Also by using `Markup::create()` you ensure no filtering will take place.
+
+### Something is Wrapping My HTML
+
+That would be _templates/ez-multipart-html.html.twig_.
 
 #### Other Variations
 

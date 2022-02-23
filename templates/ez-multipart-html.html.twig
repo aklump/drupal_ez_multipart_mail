@@ -1,0 +1,16 @@
+{% apply inline_css %}
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <style type="text/css">{{ css }}</style>
+    <meta name="x-apple-disable-message-reformatting"/>
+  </head>
+  <body style="padding:0">
+  <table style="width:800px" cellpadding="0" valign="top">
+    <tr>
+      <td>{{ message }}</td>
+    </tr>
+  </table>
+  </body>
+  </html>
+{% endapply %}

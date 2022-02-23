@@ -1,0 +1,5 @@
+services:
+  ez_multipart_mail.css_inliner_extension:
+    class: \Twig\Extra\CssInliner\CssInlinerExtension
+    tags:
+      - { name: twig.extension }

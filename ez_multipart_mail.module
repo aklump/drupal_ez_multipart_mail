@@ -8,3 +8,26 @@ use Drupal\ez_multipart_mail\Plugin\Mail\EasyMultipartMailFormatter;
 function ez_multipart_mail_mail_backend_info_alter(&$info) {
   $info['htmlmail']['class'] = EasyMultipartMailFormatter::class;
 }
+
+function ez_multipart_mail_theme() {
+  return [
+    'ez_multipart_plain' => [
+      'render element' => 'element',
+    ],
+    'ez_multipart_html' => [
+      'render element' => 'element',
+    ],
+  ];
+}
+
+function template_preprocess_ez_multipart_plain(array &$vars) {
+  $element = $vars['element'];
+  $vars['message'] = $element['#plain'];
+}
+
+function template_preprocess_ez_multipart_html(array &$vars) {
+  $element = $vars['element'];
+  $vars['css'] = $element['#css'];
+  $vars['message'] = $element['#html'];
+}
+

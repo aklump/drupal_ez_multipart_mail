@@ -1,0 +1,8 @@
+{
+    "name": "drupal/ez_multipart_mail",
+    "type": "private",
+    "require": {
+        "twig/extra-bundle": "^3.3",
+        "twig/cssinliner-extra": "^3.3"
+    }
+}

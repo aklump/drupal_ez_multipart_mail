@@ -15,6 +15,12 @@ This module provides a render element, which developers can use to generate HTML
 * You need to send HTML emails where `$message['body']` has HTML that will not be filtered or touched by the mail system.
 * You need to control plain and HTML versions separately.
 
+
+## What it Does
+
+* Turn key solution to send HTML emails in Drupal.
+* Automatically inlines CSS styles.
+
 ## Quick Start
 
 1. Configure [HTML Mail module](https://www.drupal.org/project/htmlmail) as necessary to successfully send HTML mails.
@@ -34,6 +40,7 @@ If you find this project useful... please consider [making a donation](https://w
 .
 
 ## Installation
+
 1. Save this module to _web/modules/custom/_.
 2. Add the following to root-level _composer.json_, `repositories`
     ```json
@@ -50,6 +57,10 @@ If you find this project useful... please consider [making a donation](https://w
 This module looks at the message content type returned by `\Drupal\htmlmail\Plugin\Mail\HtmlMailSystem::format` to see if it is a multipart message or not. If it is, this module does nothing to the message. If it is not, it creates a `multipart/alternative` encoded message, which contains the un-formatted message and the formatted message. That's it!
 
 ## Developers: Sending Multipart Emails
+
+### Debug Mode
+
+If you enable the _Debug_ mode at /admin/config/system/htmlmail, when you try to send your emails, the HTML version will be rendered in your browser with the exact markup that will be sent in the email, including inlined-styles, etc. Use this to design and build your emails.
 
 ### I want to send an email with html body, no templates or theme wrappers.
 

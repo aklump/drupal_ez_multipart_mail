@@ -31,6 +31,11 @@ Reasons to Enable this Module
        will not be filtered or touched by the mail system.
      * You need to control plain and HTML versions separately.
 
+What it Does
+
+     * Turn key solution to send HTML emails in Drupal.
+     * Automatically inlines CSS styles.
+
 Quick Start
 
     1. Configure [5]HTML Mail module as necessary to successfully send
@@ -72,6 +77,13 @@ Technically Speaking
    message. That's it!
 
 Developers: Sending Multipart Emails
+
+  Debug Mode
+
+   If you enable the Debug mode at /admin/config/system/htmlmail, when you
+   try to send your emails, the HTML version will be rendered in your
+   browser with the exact markup that will be sent in the email, including
+   inlined-styles, etc. Use this to design and build your emails.
 
   I want to send an email with html body, no templates or theme wrappers.
 

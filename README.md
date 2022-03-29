@@ -15,7 +15,6 @@ This module provides a render element, which developers can use to generate HTML
 * You need to send HTML emails where `$message['body']` has HTML that will not be filtered or touched by the mail system.
 * You need to control plain and HTML versions separately.
 
-
 ## What it Does
 
 * Turn key solution to send HTML emails in Drupal.
@@ -24,9 +23,20 @@ This module provides a render element, which developers can use to generate HTML
 ## Quick Start
 
 1. Configure [HTML Mail module](https://www.drupal.org/project/htmlmail) as necessary to successfully send HTML mails.
-1. Do not install or enable the PEAR mime classes integration.
-1. After you have it working, enable this module.
-1. Resend your test message (/admin/config/system/htmlmail/test) and view the email source. You should see that the email is now encoded as `Content-Type: multipart/alternative`. In your email client try viewing plain, viewing formatted, and viewing source to make comparisons.
+2. Do not install or enable the PEAR mime classes integration.
+3. Add the following to the root-level _composer.json_ and then call `composer require drupal/ez_multipart_mail:@dev`:
+   ```json
+   {
+      "repositories": [
+         {
+            "type": "path",
+            "url": "web/modules/custom/ez_multipart_mail"
+         }
+      ]
+   } 
+   ```
+4. Enable this module.
+5. Resend your test message (/admin/config/system/htmlmail/test) and view the email source. You should see that the email is now encoded as `Content-Type: multipart/alternative`. In your email client try viewing plain, viewing formatted, and viewing source to make comparisons.
 
 ## Requirements
 

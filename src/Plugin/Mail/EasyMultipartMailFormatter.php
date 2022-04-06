@@ -80,23 +80,22 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
 
     if (HtmlMailHelper::htmlMailIsAllowed($message['to'])) {
       $html_part = strval($message['body']['#html']);
-      if ($this->configVariables->get('debug')) {
-        print $html_part;
-        die;
-      }
       $combined = new AlternativePart(
         new TextPart(strval($message['body']['#plain'])),
         new TextPart($html_part, NULL, 'html')
       );
-      $message['headers'] = [];
       foreach ($combined->getPreparedHeaders()->all() as $header) {
-        $message['headers'][$header->getName()][] = $header->getBodyAsString();
+        $message['headers'][$header->getName()] = $header->getBodyAsString();
       }
       $message['body'] = $combined->bodyToString();
     }
     else {
       $message['body'] = $message['body']['#plain'];
       $message['headers']['Content-Type'] = 'text/plain; charset=utf-8';
+    }
+
+    if ($this->configVariables->get('debug')) {
+      \Drupal::service('ez_multipart_mail.debugger')->format($message);
     }
 
     return $message;

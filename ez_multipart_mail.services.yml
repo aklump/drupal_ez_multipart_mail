@@ -3,3 +3,6 @@ services:
     class: \Twig\Extra\CssInliner\CssInlinerExtension
     tags:
       - { name: twig.extension }
+  ez_multipart_mail.debugger:
+    class: \Drupal\ez_multipart_mail\Debugger
+    arguments: [ "@messenger" ]

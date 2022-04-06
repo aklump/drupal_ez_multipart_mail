@@ -88,12 +88,11 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
         new TextPart(strval($message['body']['#plain'])),
         new TextPart($html_part, NULL, 'html')
       );
-      $message['body'] = $combined->bodyToString();
-      preg_match('/\-\-(.+)\S/', $message['body'], $matches);
-      if (empty($matches[1])) {
-        throw new \RuntimeException('Missing boundary; cannot format email.');
+      $message['headers'] = [];
+      foreach ($combined->getPreparedHeaders()->all() as $header) {
+        $message['headers'][$header->getName()][] = $header->getBodyAsString();
       }
-      $message['headers']['Content-Type'] = 'multipart/alternative;boundary="' . $matches[1] . '"';
+      $message['body'] = $combined->bodyToString();
     }
     else {
       $message['body'] = $message['body']['#plain'];

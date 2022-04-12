@@ -17,6 +17,7 @@ This module provides a render element, which developers can use to generate HTML
 
 * Turn key solution to send HTML emails in Drupal.
 * Automatically inlines CSS styles.
+* Automatically converts plaintext emails to HTML (@see service `ez_multipart_mail.text_to_html`)
 
 ## Quick Start
 
@@ -135,3 +136,7 @@ $message['body'] = [
 * Are you using the `ez_multipart_mail` render element as `$message['body']`?
 * Is `#html` an instance of `\Drupal\Component\Render\MarkupInterface`?
 * Can the recipient receive HTML emails per `\Drupal\htmlmail\Helper\HtmlMailHelper::htmlMailIsAllowed()`?
+
+### Plaintext emails are converting to HTML, but the HTML is wrong
+
+* Override the service class `ez_multipart_mail.text_to_html` and modify as needed.

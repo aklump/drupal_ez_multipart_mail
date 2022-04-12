@@ -20,6 +20,12 @@ use Symfony\Component\Mime\Part\TextPart;
  */
 class EasyMultipartMailFormatter extends HtmlMailSystem {
 
+  const PLAIN = 0;
+
+  const HTML = 1;
+
+  const MIXED = 2;
+
   /**
    * Format emails according to module settings.
    *
@@ -67,22 +73,42 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
   }
 
   /**
-   * Get the content type from a message array.
+   * Determine the message type.
    *
    * @param array $message
-   *   A message array per the drupal mail API.  Expecting the "headers" key.
+   *   The message array.
    *
-   * @return string
-   *   The content type header value if found, cast to lowercase.
+   * @return integer
+   *
+   * @see \Drupal\ez_multipart_mail\Plugin\Mail\EasyMultipartMailFormatter::PLAIN
+   * @see \Drupal\ez_multipart_mail\Plugin\Mail\EasyMultipartMailFormatter::HTML
+   * @see \Drupal\ez_multipart_mail\Plugin\Mail\EasyMultipartMailFormatter::MIXED
    */
-  private function getContentTypeHeaderValue(array $message): string {
-    foreach ($message['headers'] ?? [] as $key => $value) {
+  private function getMessageType(array $message): int {
+    $value = '';
+    foreach (($message['headers'] ?? []) as $key => $value) {
       if (strtolower($key) === 'content-type') {
-        return strtolower($value);
+        $value = strtolower($value);
+        break;
       }
     }
+    if (!$value) {
+      throw new \InvalidArgumentException('Missing content type header');
+    }
 
-    return '';
+    // "The Content-Type field for multipart entities requires one parameter,
+    // "boundary", which is used to specify the encapsulation boundary."
+    // @link https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html#z0
+    if (strstr($value, 'boundary') !== FALSE) {
+      return self::MIXED;
+    }
+    if (strstr($value, '/plain') !== FALSE) {
+      return self::PLAIN;
+    }
+    if (strstr($value, '/html') !== FALSE) {
+      return self::HTML;
+    }
+    throw new \InvalidArgumentException(sprintf('Unknown content type header: %s', $value));
   }
 
   /**
@@ -99,6 +125,15 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
       return $message;
     }
 
+
+    // We could force preprocessing in theme_html but this module wants to make
+    // life easier for the developer, so we will convert text/plains to
+    // text/html automatically.  Plaintext messages come from the system, such
+    // as password reset emails.
+    if ($this->getMessageType($message) === self::PLAIN) {
+      $message = $this->messageToHtml($message);
+    }
+
     // We will send to the parent formatting method for several reasons:
     //  - Ensure the "from" header.
     //  - Leverage the Mail Mime module if installed and configured OR...
@@ -111,13 +146,7 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
     // already multipart, because it's possible that the formatted version has
     // already created a multipart message, depending on the settings and
     // plugins that may or may not be present on this Drupal install.
-    $content_type_header = $this->getContentTypeHeaderValue($formatted_message);
-
-    // "The Content-Type field for multipart entities requires one parameter,
-    // "boundary", which is used to specify the encapsulation boundary."
-    // @link https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html#z0
-    $is_multipart = strstr($content_type_header, 'boundary=') !== FALSE;
-    if ($is_multipart) {
+    if ($this->getMessageType($formatted_message) === self::MIXED) {
       return $formatted_message;
     }
 
@@ -135,10 +164,8 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
       $message['body'] = implode("$eol$eol", $message['body']);
     }
 
-    // Convert the content if it's not already plaintext.
-    $content_type_header = $this->getContentTypeHeaderValue($message);
-    $is_plaintext = boolval(strstr($content_type_header, 'text/plain'));
-    if (!$is_plaintext) {
+    // Convert the content if it's HTML.
+    if ($this->getMessageType($message) !== self::PLAIN) {
       $message['body'] = MailFormatHelper::htmlToText($message['body']);
     }
 
@@ -152,5 +179,39 @@ class EasyMultipartMailFormatter extends HtmlMailSystem {
 
     return $message;
   }
-  
+
+  /**
+   * Convert a plaintext message to HTML.
+   *
+   * @param array $message
+   *   The message array.
+   *
+   * @return array
+   *   The message converted from text/plain to text/html.
+   */
+  protected function messageToHtml(array $message): array {
+    if ($this->getMessageType($message) === self::HTML) {
+      return $message;
+    }
+    $key = 'Content-Type';
+    foreach (array_keys($message['headers']) as $key) {
+      if (strcasecmp('content-type', $key) === 0) {
+        break;
+      }
+      $key = 'Content-Type';
+    }
+    $message['headers'][$key] = preg_replace('/text\/.+?;/i', 'text/html;', $message['headers'][$key]);
+    if (is_array($message['body'])) {
+      $eol = $this->siteSettings->get('mail_line_endings', PHP_EOL);
+      $message['body'] = implode("$eol$eol", $message['body']);
+    }
+    $html = \Drupal::service('ez_multipart_mail.text_to_html')
+      ->process($message['body']);
+    if ($html !== $message['body']) {
+      $message['body'] = Markup::create($html);
+    }
+
+    return $message;
+  }
+
 }

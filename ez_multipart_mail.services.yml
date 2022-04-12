@@ -1,4 +1,6 @@
 services:
+  ez_multipart_mail.text_to_html:
+    class: \Drupal\ez_multipart_mail\TextToHtml
   ez_multipart_mail.css_inliner_extension:
     class: \Twig\Extra\CssInliner\CssInlinerExtension
     tags:

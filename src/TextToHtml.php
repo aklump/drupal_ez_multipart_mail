@@ -26,16 +26,25 @@ class TextToHtml {
     }
 
     $html = $this->processLinks($html);
+    $html = $this->processEmails($html);
 
     return $html;
   }
 
   private function processLinks(string $subject) {
     // @link https://ihateregex.io/expr/url/
-    $regex = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/';
+    $regex = '/https?:\/\/(www\.)?([-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*))/';
 
     return preg_replace_callback($regex, function ($link) {
-      return sprintf('<a href="%s">%s</a>', $link[0], $link[0]);
+      return sprintf('<a href="%s">%s</a>', $link[0], $link[2]);
+    }, $subject);
+  }
+
+  private function processEmails(string $subject) {
+    $regex = '/(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/';
+
+    return preg_replace_callback($regex, function ($link) {
+      return sprintf('<a href="mailto:%s">%s</a>', $link[0], $link[0]);
     }, $subject);
   }
 

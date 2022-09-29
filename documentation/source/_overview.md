@@ -1,6 +1,6 @@
 ## Summary
 
-The [HTML Mail module](https://www.drupal.org/project/htmlmail) works great to send HTML mails, but it is difficult to configure it to send multipart messages due to the dependencies involved ([Mail MIME](https://www.drupal.org/project/mailmime), [Pear](https://pear.php.net/package/Mail_Mime)) . This module removes the extra effort and requires no dependencies and no configuration to allow for multipart messages which are HTML and plaintext. It improves the display of the plaintext email messages received by your users because they are sent as both HTML and plaintext as soon as this module is enabled.
+The [HTML Mail module](https://www.drupal.org/project/htmlmail) works great to send HTML mails, but it is difficult to configure it to send multipart messages due to the dependencies involved ([Mail MIME](https://www.drupal.org/project/mailmime), [Pear](https://pear.php.net/package/Mail_Mime)) . This module removes the extra effort and requires no configuration to allow for multipart messages which are HTML and plaintext. It improves the display of the plaintext email messages received by your users because they are sent as both HTML and plaintext as soon as this module is enabled.
 
 It is not a complete multipart solution, because it doesn't support attachments.
 

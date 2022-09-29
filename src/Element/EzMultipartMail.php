@@ -23,6 +23,16 @@ use Drupal\Core\Site\Settings;
  * ];
  * @endcode
  *
+ * If #html and #plain are strings, they will be processed for safety; to avoid
+ * this then you should use \Drupal\Core\Render\Markup as shown above.
+ * @code
+ * $message['body'] = [
+ *   '#type' => 'ez_multipart_mail',
+ *   '#html' => '<h1>Lorem ipsum</h1>'
+ *   '#plain' => 'Lorem ipsum',
+ * ];
+ * @endcode
+ *
  * @RenderElement("ez_multipart_mail")
  */
 class EzMultipartMail extends RenderElement {
@@ -87,11 +97,15 @@ class EzMultipartMail extends RenderElement {
    * @param array $element
    *
    * @return array
+   *
+   * @see \Drupal\htmlmail\Plugin\Mail\HtmlMailSystem::format
    */
   public static function filterAndFormat(array $element) {
     if (!$element['#plain'] instanceof MarkupInterface) {
+      // Convert any HTML to plain-text.
       $element['#plain'] = MailFormatHelper::htmlToText($element['#plain']);
-      $element['#plain'] = MailFormatHelper::formatPlain($element['#plain']);
+      // Wrap the mail body for sending.
+      $element['#plain'] = MailFormatHelper::wrapMail($element['#plain']);
     }
     if (!$element['#html'] instanceof MarkupInterface) {
       $element['#html'] = Xss::filter($element['#html']);

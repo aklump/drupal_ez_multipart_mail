@@ -1,11 +1,9 @@
-master = "8.x-1.x"
-develop = "8.x-1.x"
-remote = origin
-create_tags = patch
-push_tags = auto
-push_master = auto
-push_develop = no
-patch_prefix = .
-preserve_patch_zero = true
-git_root = .
-info_file = ez_multipart_mail.info.yml
+master: "main"
+remote: origin
+create_tags: patch
+push_tags: auto
+push_master: auto
+patch_prefix: .
+preserve_patch_zero: true
+git_root: .
+version_file: ez_multipart_mail.info.yml

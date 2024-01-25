@@ -2,7 +2,7 @@ name: 'Easy Multipart MIME Mail'
 description: 'Adds no config, no dependency multipart MIME email formatting to the HTML mail module.'
 package: Mail
 type: module
-core_version_requirement: '^8 || ^9'
-version: 8.x-0.3.0
+core_version_requirement: '>=8'
+version: 0.3.0
 dependencies:
   - 'drupal:htmlmail'

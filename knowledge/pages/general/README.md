@@ -1,3 +1,10 @@
+<!--
+id: readme
+tags: ''
+-->
+
+# Easy Multipart Mail Drupal Module
+
 ## Summary
 
 The [HTML Mail module](https://www.drupal.org/project/htmlmail) works great to send HTML mails, but it is difficult to configure it to send multipart messages due to the dependencies involved ([Mail MIME](https://www.drupal.org/project/mailmime), [Pear](https://pear.php.net/package/Mail_Mime)) . This module removes the extra effort and requires no configuration to allow for multipart messages which are HTML and plaintext. It improves the display of the plaintext email messages received by your users because they are sent as both HTML and plaintext as soon as this module is enabled.
@@ -19,23 +26,14 @@ This module provides a render element, which developers can use to generate HTML
 * Automatically inlines CSS styles.
 * Automatically converts plaintext emails to HTML (@see service `ez_multipart_mail.text_to_html`)
 
+{{ composer_install|raw }}
+
 ## Quick Start
 
 1. Configure [HTML Mail module](https://www.drupal.org/project/htmlmail) as necessary to successfully send HTML mails.
 2. Do not install or enable the PEAR mime classes integration.
 3. Do not enable _Provide simple plain/text alternative of the HTML mail._.
-4. Post-filtering is not necesssary, but may still be used.
-5. Add the following to the root-level _composer.json_ and then call `composer require drupal/ez_multipart_mail:@dev`:
-   ```json
-   {
-      "repositories": [
-         {
-            "type": "path",
-            "url": "web/modules/custom/ez_multipart_mail"
-         }
-      ]
-   } 
-   ```
+4. Post-filtering is not necessary, but may still be used.
 6. Enable this module.
 7. Resend your test message (/admin/config/system/htmlmail/test) and view the email source. You should see that the email is now encoded as `Content-Type: multipart/alternative`. In your email client try viewing plain, viewing formatted, and viewing source to make comparisons.
 
@@ -138,3 +136,14 @@ $message['body'] = [
 ### Plaintext emails are converting to HTML, but the HTML is wrong
 
 * Override the service class `ez_multipart_mail.text_to_html` and modify as needed.
+
+
+## Contact The Developer
+
+* In the Loft Studios
+* Aaron Klump - Web Developer
+* sourcecode@intheloftstudios.com
+* 360.690.6432
+* PO Box 29294 Bellingham, WA 98228-1294
+* <http://www.customdrupalmodules.com>
+* <https://github.com/aklump>

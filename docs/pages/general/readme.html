@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/node_modules/bootstrap/dist/css/bootstrap.css?ver=0.3.1">
+      <link rel="stylesheet" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/style.css?ver=0.3.1">
+      <link rel="stylesheet" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/node_modules/bootstrap-icons/font/bootstrap-icons.min.css?ver=0.3.1">
+    <title>Easy Multipart Mail Drupal Module | Easy Multipart Mail</title>
+</head>
+<body class="my-5">
+
+<header class="header bg-light fixed-top p-2 pt-1">
+  <div class="container-md">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="header__breadcrumbs flex-shrink-0 flex-grow-1 me-3">
+        <nav aria-label="breadcrumb">
+  <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+      <a class="fw-bold" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/index.html">Easy Multipart Mail</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a class="fw-bold" href="#" data-bs-toggle="offcanvas"
+         data-bs-target="#table-of-contents"
+         aria-controls="table-of-contents">TOC</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/readme.html">General</a></li>
+  </ol>
+</nav>
+
+      </div>
+      <div class="header__tags me-3">  </div>
+      <div class="header__page-numbers flex-shrink-1">1
+        / 3</div>
+    </div>
+  </div>
+</header>
+
+<main class="container-md flex-column">
+  <div class="row mb-5 pt-5">
+    <article class="col">
+      <h1 class="mb-4 text-primary">Easy Multipart Mail Drupal Module</h1>
+      <h2>Summary</h2>
+<p>The <a href="https://www.drupal.org/project/htmlmail">HTML Mail module</a> works great to send HTML mails, but it is difficult to configure it to send multipart messages due to the dependencies involved (<a href="https://www.drupal.org/project/mailmime">Mail MIME</a>, <a href="https://pear.php.net/package/Mail_Mime">Pear</a>) . This module removes the extra effort and requires no configuration to allow for multipart messages which are HTML and plaintext. It improves the display of the plaintext email messages received by your users because they are sent as both HTML and plaintext as soon as this module is enabled.</p>
+<p>It is not a complete multipart solution, because it doesn't support attachments.</p>
+<p>This module provides a render element, which developers can use to generate HTML + text emails very easily at the code level. @see <code>\Drupal\ez_multipart_mail\Element\EzMultipartMail</code>. The HTML and plaintext versions of are independently themed using separate template files: <em>ez-multipart-html.html.twig</em> and <em>ez-multipart-plain.html.twig</em>.</p>
+<h2>Reasons to Enable this Module</h2>
+<ul>
+<li>You can't or don't want to install the <a href="https://www.drupal.org/project/mailmime">Mail MIME</a> module due to it's dependency on the Pear package, but you still want to send multipart MIME mails.</li>
+<li>As a developer, you want to send HTML emails without involving your theme.</li>
+<li>You need to send HTML emails where <code>$message['body']</code> has HTML that will not be filtered or touched by the mail system.</li>
+<li>You need to control the <code>text/plain</code> and <code>text/html</code> email parts of an email separately.</li>
+</ul>
+<h2>What it Does</h2>
+<ul>
+<li>Turn key solution to send HTML emails in Drupal.</li>
+<li>Automatically inlines CSS styles.</li>
+<li>Automatically converts plaintext emails to HTML (@see service <code>ez_multipart_mail.text_to_html</code>)</li>
+</ul>
+<h2>Install with Composer</h2>
+<ol>
+<li><p>Because this is an unpublished package, you must define it's repository in your project's <em>composer.json</em> file. Add the following to <em>composer.json</em>:</p>
+<pre><code class="json"> "repositories": [
+     {
+         "type": "github",
+         "url": "https://github.com/aklump/drupal_ez_multipart_mail"
+     }
+ ]
+</code></pre>
+</li>
+<li><p>Then <code>composer require drupal/ez_multipart_mail:^0.3</code>    </p>
+</li>
+</ol>
+<h2>Quick Start</h2>
+<ol>
+<li>Configure <a href="https://www.drupal.org/project/htmlmail">HTML Mail module</a> as necessary to successfully send HTML mails.</li>
+<li>Do not install or enable the PEAR mime classes integration.</li>
+<li>Do not enable <em>Provide simple plain/text alternative of the HTML mail.</em>.</li>
+<li>Post-filtering is not necessary, but may still be used.</li>
+<li>Enable this module.</li>
+<li>Resend your test message (/admin/config/system/htmlmail/test) and view the email source. You should see that the email is now encoded as <code>Content-Type: multipart/alternative</code>. In your email client try viewing plain, viewing formatted, and viewing source to make comparisons.</li>
+</ol>
+<h2>Requirements</h2>
+<ul>
+<li><a href="https://www.drupal.org/project/htmlmail">HTML Mail module</a></li>
+<li>Tested on Drupal 9</li>
+<li>Not yet tested on Drupal 8</li>
+</ul>
+<h2>Contributing</h2>
+<p>If you find this project useful... please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=4E5KZHDQCEUV8&amp;item_name=Gratitude%20for%20aklump%2Fez_multipart_mail">making a donation</a>
+.</p>
+<h2>Technically Speaking</h2>
+<p>If an email is sent with a body that is an element of type <code>#ez_multipart_mail</code> then the body will will rendered based on that element.</p>
+<hr />
+<p>On the otherhand, if the body is an array or scalar--that is normal drupal emails--then a multipart will be built per the following...</p>
+<p>This module will convert <code>text/plain</code> emails to <code>text/html</code> using the <code>ez_multipart_mail.text_to_html</code> service.</p>
+<p>Then it hands the message to <code>\Drupal\htmlmail\Plugin\Mail\HtmlMailSystem::format()</code> for formatting. If that method creates a content type of <code>multipart/alternative</code> then this module returns the message.</p>
+<p>If it remains <code>text/html</code> then it will be converted to <code>multipart/alternative</code> using the body returned from <code>HtmlMailSystem::format()</code> and a plaintext version from the original message.</p>
+<h2>Developers: Sending Multipart Emails</h2>
+<h3>Debug Mode</h3>
+<p>If you enable the <em>Debug</em> mode at /admin/config/system/htmlmail, when you send your emails, the Messenger service will receive the HTML and then the full body of your email. The sent email will also contain debugging info per the HTML mail module.</p>
+<h3>I want to send an email with html body, no templates or theme wrappers.</h3>
+<p>The answer is to set the <code>$message['body']</code> like this:</p>
+<pre><code class="php">$message['body'] = [
+  '#type' =&gt; 'ez_multipart_mail',
+  '#html' =&gt; \Drupal\Core\Render\Markup::create('&lt;h1&gt;Lorem&lt;/h1&gt;'),
+  '#plain' =&gt; \Drupal\Core\Render\Markup::create('# Lorem'),
+];
+</code></pre>
+<p>You can see that you have absolute control of both HTML and plain. Also by using <code>Markup::create()</code> you ensure no filtering will take place.</p>
+<h3>Something is Wrapping My HTML</h3>
+<p>It's most likely <em>templates/ez-multipart-html.html.twig</em>.</p>
+<h4>Other Variations</h4>
+<pre><code class="php">&lt;?php
+
+// This HTML will be filtered using \Drupal\Component\Utility\Xss::filter().
+// The plaintext will be generated using \Drupal\Core\Mail\MailFormatHelper::htmlToText().
+$message['body'] = [
+  '#type' =&gt; 'ez_multipart_mail',
+  '#html' =&gt; '&lt;h1&gt;Lorem&lt;/h1&gt;',
+];
+
+
+// This HTML will not be filtered.
+// The plaintext will be generated using \Drupal\Core\Mail\MailFormatHelper::htmlToText().
+$message['body'] = [
+  '#type' =&gt; 'ez_multipart_mail',
+  '#html' =&gt; \Drupal\Core\Render\Markup::create('&lt;h1&gt;Lorem&lt;/h1&gt;'),
+];
+
+// This HTML will not be filtered.
+// The plaintext array will be treated as separate paragraphs.
+$message['body'] = [
+  '#type' =&gt; 'ez_multipart_mail',
+  '#html' =&gt; \Drupal\Core\Render\Markup::create('&lt;h1&gt;Lorem&lt;/h1&gt;'),
+  '#plain' =&gt; ['Lorem', 'ipsum', 'dolar'],
+];
+</code></pre>
+<h3>I Need to include CSS</h3>
+<p>Create a library to contain your CSS. The CSS will be added to the email.</p>
+<pre><code class="php">$message['body'] = [
+  '#type' =&gt; 'ez_multipart_mail',
+  '#html' =&gt; \Drupal\Core\Render\Markup::create('&lt;h1&gt;Lorem&lt;/h1&gt;'),
+  '#plain' =&gt; \Drupal\Core\Render\Markup::create('# Lorem'),
+  '#attached' =&gt; ['library' =&gt; 'foo/bar'],
+];
+</code></pre>
+<h3>I've enabled the module, but my mail is not HTML</h3>
+<ul>
+<li>Are you using the <code>ez_multipart_mail</code> render element as <code>$message['body']</code>?</li>
+<li>Is <code>#html</code> an instance of <code>\Drupal\Component\Render\MarkupInterface</code>?</li>
+<li>Can the recipient receive HTML emails per <code>\Drupal\htmlmail\Helper\HtmlMailHelper::htmlMailIsAllowed()</code>?</li>
+</ul>
+<h3>Plaintext emails are converting to HTML, but the HTML is wrong</h3>
+<ul>
+<li>Override the service class <code>ez_multipart_mail.text_to_html</code> and modify as needed.</li>
+</ul>
+<h2>Contact The Developer</h2>
+<ul>
+<li>In the Loft Studios</li>
+<li>Aaron Klump - Web Developer</li>
+<li>sourcecode@intheloftstudios.com</li>
+<li>360.690.6432</li>
+<li>PO Box 29294 Bellingham, WA 98228-1294</li>
+<li><a href="http://www.customdrupalmodules.com">http://www.customdrupalmodules.com</a></li>
+<li><a href="https://github.com/aklump">https://github.com/aklump</a></li>
+</ul>
+    </article>
+  </div>
+</main>
+
+  <footer class="footer d-flex justify-content-center">
+    <div class="flex-column justify-content-center">
+                  Version:
+          <strong>0.3.1</strong>
+          &bull;
+                Last Update: <strong>1/27/2024</strong>
+    </div>
+  </footer>
+
+
+<nav class="nav d-flex justify-content-center align-items-center
+  fixed-bottom">
+  <div class="btn-group flex-fill">
+              <a href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/readme.html" class="btn nav__prev-chapter btn-secondary"><i class="bi
+      bi-caret-left-fill"></i> Easy Multipart Mail Drupal Module</a>
+  
+    
+              <span class="btn nav__prev-page js-nav__prev-page
+    btn-primary"></span>
+  
+    
+    <a class="nav__toc btn btn-light" href="#"
+       data-bs-toggle="offcanvas"
+       data-bs-target="#table-of-contents"
+       aria-controls="table-of-contents"><i class="bi
+           bi-list-ol"></i></a>
+    
+              <a href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/testing.html" class="btn nav__next-page js-nav__next-page
+    btn-primary"><i class="bi bi-file-earmark"></i> Unit Tests. <i class="bi
+       bi-caret-right-fill"></i></a>
+  
+    
+              <span class="btn nav__next-chapter btn-secondary "></span>
+  
+  </div>
+</nav>
+
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="table-of-contents"
+     aria-labelledby="table-of-contents__title" data-bs-keyboard="true">
+  <div class="offcanvas-header">
+    <h1 class="h6 offcanvas-title js-chapter-list-title"
+        id="table-of-contents__title">All
+      Chapters
+      &amp; Pages</h1>
+    <h1 class="d-none h6 offcanvas-title js-search-results-title"
+        id="table-of-contents__title">Search Results</h1>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+          <input class="js-search form-control mb-4" type="search"
+             placeholder="Search docs..."
+             aria-label="Search">
+      <div class="js-search-results d-none">
+        <h2 class="h4 mt-4">Matched Pages</h2>
+        <ol class="list-unstyled">
+                                              <li data-page="readme" value="1">
+      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/readme.html">Easy Multipart Mail Drupal Module<span
+              class="js-search-score
+              badge
+              bg-info rounded-pill badge-sm"></span></a>&nbsp;[General]
+    </li>
+  
+                                    <li data-page="testing" value="2">
+      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/testing.html">Unit Tests.<span
+              class="js-search-score
+              badge
+              bg-info rounded-pill badge-sm"></span></a>&nbsp;[General]
+    </li>
+  
+                                    <li data-page="changelog" value="3">
+      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/changelog.html">Changelog<span
+              class="js-search-score
+              badge
+              bg-info rounded-pill badge-sm"></span></a>&nbsp;[General]
+    </li>
+  
+                              </ol>
+      </div>
+        
+    <div class="js-chapter-list">
+              <h2 class="h4 mt-4">General</h2>
+        <ol>
+                                <li data-page="readme" value="1">
+      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/readme.html">Easy Multipart Mail Drupal Module</a>&nbsp;[General]
+    </li>
+  
+                                <li data-page="testing" value="2">
+      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/testing.html">Unit Tests.</a>&nbsp;[General]
+    </li>
+  
+                                <li data-page="changelog" value="3">
+      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/changelog.html">Changelog</a>&nbsp;[General]
+    </li>
+  
+                  </ol>
+          </div>
+  </div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1"
+     aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="js-modal-title modal-title" id="modal-title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mt-1 mb-4">
+                  </p>
+        
+                
+        <ul class="list-group list-group-flush">
+                                    <a class="list-group-item list-group-item-action"
+                 data-tags="[]" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/readme.html">Easy Multipart Mail Drupal Module</a>
+                                                <a class="list-group-item list-group-item-action"
+                 data-tags="[]" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/testing.html">Unit Tests.</a>
+                                                <a class="list-group-item list-group-item-action"
+                 data-tags="[]" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/changelog.html">Changelog</a>
+                              </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/node_modules/bootstrap/dist/js/bootstrap.min.js?ver=0.3.1"></script>
+  <script src="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/dist/lunr.js?ver=0.3.1"></script>
+  <script src="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/knowledge.min.js?ver=0.3.1"></script>
+
+</body>
+</html>

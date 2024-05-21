@@ -4,9 +4,9 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/node_modules/bootstrap/dist/css/bootstrap.css?ver=0.3.1">
-      <link rel="stylesheet" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/style.css?ver=0.3.1">
-      <link rel="stylesheet" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/node_modules/bootstrap-icons/font/bootstrap-icons.min.css?ver=0.3.1">
+      <link rel="stylesheet" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/node_modules/bootstrap/dist/css/bootstrap.css?ver=0.3.3">
+      <link rel="stylesheet" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/style.css?ver=0.3.3">
+      <link rel="stylesheet" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/node_modules/bootstrap-icons/font/bootstrap-icons.min.css?ver=0.3.3">
     <title>Easy Multipart Mail Drupal Module | Easy Multipart Mail</title>
 </head>
 <body class="my-5">
@@ -61,16 +61,22 @@
 </ul>
 <h2>Install with Composer</h2>
 <ol>
-<li><p>Because this is an unpublished package, you must define it's repository in your project's <em>composer.json</em> file. Add the following to <em>composer.json</em>:</p>
-<pre><code class="json"> "repositories": [
-     {
-         "type": "github",
-         "url": "https://github.com/aklump/drupal_ez_multipart_mail"
-     }
- ]
+<li><p>Because this is an unpublished package, you must define it's repository in
+your project's <em>composer.json</em> file. Add the following to <em>composer.json</em> in
+the <code>repositories</code> array:</p>
+<pre><code class="json"> {
+     "type": "github",
+     "url": "https://github.com/aklump/drupal_ez_multipart_mail"
+ }
 </code></pre>
 </li>
-<li><p>Then <code>composer require drupal/ez_multipart_mail:^0.3</code>    </p>
+<li><p>Require this package:</p>
+<pre><code> composer require drupal/ez_multipart_mail:^0.3
+</code></pre>
+</li>
+<li><p>Add the installed directory to <em>.gitignore</em></p>
+<pre><code class="php">/web/modules/custom/ez_multipart_mail/
+</code></pre>
 </li>
 </ol>
 <h2>Quick Start</h2>
@@ -174,9 +180,9 @@ $message['body'] = [
   <footer class="footer d-flex justify-content-center">
     <div class="flex-column justify-content-center">
                   Version:
-          <strong>0.3.1</strong>
+          <strong>0.3.3</strong>
           &bull;
-                Last Update: <strong>1/27/2024</strong>
+                Last Update: <strong>5/21/2024</strong>
     </div>
   </footer>
 
@@ -231,21 +237,21 @@ $message['body'] = [
       <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/readme.html">Easy Multipart Mail Drupal Module<span
               class="js-search-score
               badge
-              bg-info rounded-pill badge-sm"></span></a>&nbsp;[General]
+              bg-info rounded-pill badge-sm"></span></a>
     </li>
   
                                     <li data-page="testing" value="2">
       <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/testing.html">Unit Tests.<span
               class="js-search-score
               badge
-              bg-info rounded-pill badge-sm"></span></a>&nbsp;[General]
+              bg-info rounded-pill badge-sm"></span></a>
     </li>
   
                                     <li data-page="changelog" value="3">
       <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/changelog.html">Changelog<span
               class="js-search-score
               badge
-              bg-info rounded-pill badge-sm"></span></a>&nbsp;[General]
+              bg-info rounded-pill badge-sm"></span></a>
     </li>
   
                               </ol>
@@ -255,15 +261,15 @@ $message['body'] = [
               <h2 class="h4 mt-4">General</h2>
         <ol>
                                 <li data-page="readme" value="1">
-      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/readme.html">Easy Multipart Mail Drupal Module</a>&nbsp;[General]
+      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/readme.html">Easy Multipart Mail Drupal Module</a>
     </li>
   
                                 <li data-page="testing" value="2">
-      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/testing.html">Unit Tests.</a>&nbsp;[General]
+      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/testing.html">Unit Tests.</a>
     </li>
   
                                 <li data-page="changelog" value="3">
-      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/changelog.html">Changelog</a>&nbsp;[General]
+      <a class="js-page-link" href="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/pages/general/changelog.html">Changelog</a>
     </li>
   
                   </ol>
@@ -296,9 +302,9 @@ $message['body'] = [
   </div>
 </div>
 
-  <script src="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/node_modules/bootstrap/dist/js/bootstrap.min.js?ver=0.3.1"></script>
-  <script src="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/dist/lunr.js?ver=0.3.1"></script>
-  <script src="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/knowledge.min.js?ver=0.3.1"></script>
+  <script src="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/node_modules/bootstrap/dist/js/bootstrap.min.js?ver=0.3.3"></script>
+  <script src="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/lunr.js?ver=0.3.3"></script>
+  <script src="/Users/aklump/Code/Packages/d8/ez_multipart_mail/docs/dist/knowledge.min.js?ver=0.3.3"></script>
 
 </body>
 </html>

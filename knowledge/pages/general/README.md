@@ -26,7 +26,7 @@ This module provides a render element, which developers can use to generate HTML
 * Automatically inlines CSS styles.
 * Automatically converts plaintext emails to HTML (@see service `ez_multipart_mail.text_to_html`)
 
-{{ composer_install|raw }}
+{{ composer.install|raw }}
 
 ## Quick Start
 

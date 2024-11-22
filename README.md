@@ -23,18 +23,26 @@ This module provides a render element, which developers can use to generate HTML
 
 ## Install with Composer
 
-1. Because this is an unpublished package, you must define it's repository in your project's _composer.json_ file. Add the following to _composer.json_:
-
+1. Because this is an unpublished package, you must define it's repository in
+   your project's _composer.json_ file. Add the following to _composer.json_ in
+   the `repositories` array:
+   
     ```json
-    "repositories": [
-        {
-            "type": "github",
-            "url": "https://github.com/aklump/drupal_ez_multipart_mail"
-        }
-    ]
+    {
+     "type": "github",
+     "url": "https://github.com/aklump/drupal_ez_multipart_mail"
+    }
     ```
-
-1. Then `composer require drupal/ez_multipart_mail:^0.3`    
+1. Require this package:
+   
+    ```
+    composer require drupal/ez_multipart_mail:^0.3
+    ```
+1. Add the installed directory to _.gitignore_
+   
+   ```php
+   /web/modules/custom/ez_multipart_mail/
+   ```
 
 ## Quick Start
 

@@ -1,1 +1,10 @@
-title: Easy Multipart Mail
+title: 'Easy Multipart Mail'
+uuid: 8670afac-1378-473e-a4c9-cb2acdffba62
+chapters:
+  -
+    id: general
+    title: General
+    pages:
+      - changelog
+      - readme
+      - testing

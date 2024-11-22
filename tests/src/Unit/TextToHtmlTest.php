@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Drupal\ez_multipart_mail\Tests;
+namespace Drupal\Tests\ez_multipart_mail\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Drupal\ez_multipart_mail\TextToHtml;

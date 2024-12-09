@@ -3,6 +3,6 @@ description: 'Adds no config, no dependency multipart MIME email formatting to t
 package: Mail
 type: module
 core_version_requirement: '>=8'
-version: 0.3.5
+version: 0.3.6
 dependencies:
   - 'drupal:htmlmail'

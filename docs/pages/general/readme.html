@@ -4,9 +4,9 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="../../dist/node_modules/bootstrap/dist/css/bootstrap.css?ver=0.3.5">
-      <link rel="stylesheet" href="../../dist/dist/bootstrap_theme.css?ver=0.3.5">
-      <link rel="stylesheet" href="../../dist/node_modules/bootstrap-icons/font/bootstrap-icons.min.css?ver=0.3.5">
+      <link rel="stylesheet" href="../../dist/node_modules/bootstrap/dist/css/bootstrap.css?ver=0.3.6">
+      <link rel="stylesheet" href="../../dist/dist/bootstrap_theme.css?ver=0.3.6">
+      <link rel="stylesheet" href="../../dist/node_modules/bootstrap-icons/font/bootstrap-icons.min.css?ver=0.3.6">
     <title>Easy Multipart Mail Drupal Module | Easy Multipart Mail</title>
 </head>
 <body class="my-5">
@@ -60,7 +60,7 @@
 <li>Automatically converts plaintext emails to HTML (@see service <code>ez_multipart_mail.text_to_html</code>)</li>
 </ul>
 <h2>Install with Composer</h2>
-<p>Because this is an unpublished, custom Drupal extension, the way you install and depend on it is a little different than published, contributed extensions.</p>
+<p>Because this is an unpublished, custom Drupal module, the way you install and depend on it is a little different than published, contributed modules.</p>
 <ul>
 <li>Add the following to the <strong>root-level</strong> <em>composer.json</em> in the <code>repositories</code> array:<pre><code class="json">  {
    "type": "github",
@@ -82,7 +82,7 @@
 </li>
 </ul>
 <hr />
-<h3>B. Depend on This Extension</h3>
+<h3>B. Depend on This Module</h3>
 <p>(_Replace <code>my_module</code> below with your module (or theme's) real name._)</p>
 <ul>
 <li>Add the following to _my<em>module/composer.json</em> in the <code>repositories</code> array. (<em>Yes, this is done both here and at the root-level.</em>)<pre><code class="json">  {
@@ -103,10 +103,10 @@
 <li>Back at the <strong>root-level</strong> run <code>composer update my_module</code></li>
 </ul>
 <hr />
-<h3>Enable This Extension</h3>
+<h3>Enable This Module</h3>
 <ul>
 <li>Re-build Drupal caches, if necessary.</li>
-<li>Enable this extension, e.g.,<pre><code class="shell">drush pm-install ez_multipart_mail
+<li>Enable this module, e.g.,<pre><code class="shell">drush pm-install ez_multipart_mail
 </code></pre>
 </li>
 </ul>
@@ -211,7 +211,7 @@ $message['body'] = [
   <footer class="footer d-flex justify-content-center">
     <div class="flex-column justify-content-center">
               Version:
-        <strong>0.3.5</strong>
+        <strong>0.3.6</strong>
         &bull;
                     Last Update: <strong>12/9/2024</strong>
           </div>
@@ -334,9 +334,9 @@ $message['body'] = [
   </div>
 </div>
 
-  <script src="../../dist/node_modules/bootstrap/dist/js/bootstrap.min.js?ver=0.3.5"></script>
-  <script src="../../dist/lunr.js?ver=0.3.5"></script>
-  <script src="../../dist/knowledge.min.js?ver=0.3.5"></script>
+  <script src="../../dist/node_modules/bootstrap/dist/js/bootstrap.min.js?ver=0.3.6"></script>
+  <script src="../../dist/lunr.js?ver=0.3.6"></script>
+  <script src="../../dist/knowledge.min.js?ver=0.3.6"></script>
 
 </body>
 </html>

@@ -23,7 +23,7 @@ This module provides a render element, which developers can use to generate HTML
 
 ## Install with Composer
 
-Because this is an unpublished, custom Drupal extension, the way you install and depend on it is a little different than published, contributed extensions.
+Because this is an unpublished, custom Drupal module, the way you install and depend on it is a little different than published, contributed modules.
 
 * Add the following to the **root-level** _composer.json_ in the `repositories` array:
     ```json
@@ -45,7 +45,7 @@ Because this is an unpublished, custom Drupal extension, the way you install and
     composer require drupal/ez_multipart_mail:^0.3
     ```
 ---
-### B. Depend on This Extension
+### B. Depend on This Module
 
 (_Replace `my_module` below with your module (or theme's) real name._)
 
@@ -69,10 +69,10 @@ Because this is an unpublished, custom Drupal extension, the way you install and
 
 
 ---
-### Enable This Extension
+### Enable This Module
 
 * Re-build Drupal caches, if necessary.
-* Enable this extension, e.g.,
+* Enable this module, e.g.,
   ```shell
   drush pm-install ez_multipart_mail
   ```

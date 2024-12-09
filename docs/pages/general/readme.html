@@ -60,25 +60,56 @@
 <li>Automatically converts plaintext emails to HTML (@see service <code>ez_multipart_mail.text_to_html</code>)</li>
 </ul>
 <h2>Install with Composer</h2>
-<ol>
-<li><p>Because this is an unpublished package, you must define it's repository in
-your project's <em>composer.json</em> file. Add the following to <em>composer.json</em> in
-the <code>repositories</code> array:</p>
-<pre><code class="json"> {
-  "type": "github",
-  "url": "https://github.com/aklump/drupal_ez_multipart_mail"
- }
+<p>Because this is an unpublished, custom Drupal extension, the way you install and depend on it is a little different than published, contributed extensions.</p>
+<ul>
+<li>Add the following to the <strong>root-level</strong> <em>composer.json</em> in the <code>repositories</code> array:<pre><code class="json">  {
+   "type": "github",
+   "url": "https://github.com/aklump/drupal_ez_multipart_mail"
+  }
 </code></pre>
 </li>
-<li><p>Require this package:</p>
-<pre><code> composer require drupal/ez_multipart_mail:^0.3
+<li><p>Add the installed directory to <strong>root-level</strong> <em>.gitignore</em></p>
+<pre><code class="php"> /web/modules/custom/ez_multipart_mail/
 </code></pre>
 </li>
-<li><p>Add the installed directory to <em>.gitignore</em></p>
-<pre><code class="php">/web/modules/custom/ez_multipart_mail/
+<li>Proceed to either A or B, but not both.</li>
+</ul>
+<hr />
+<h3>A. Install Standalone</h3>
+<ul>
+<li>Require _ez_multipart<em>mail</em> at the <strong>root-level</strong>.<pre><code>  composer require drupal/ez_multipart_mail:^0.3
 </code></pre>
 </li>
-</ol>
+</ul>
+<hr />
+<h3>B. Depend on This Extension</h3>
+<p>(_Replace <code>my_module</code> below with your module (or theme's) real name._)</p>
+<ul>
+<li>Add the following to _my<em>module/composer.json</em> in the <code>repositories</code> array. (<em>Yes, this is done both here and at the root-level.</em>)<pre><code class="json">  {
+   "type": "github",
+   "url": "https://github.com/aklump/drupal_ez_multipart_mail"
+  }
+</code></pre>
+</li>
+<li><p>From the depending module (or theme) directory run:
+  <code>  composer require drupal/ez_multipart_mail:^0.3 --no-update
+ </code></p>
+</li>
+<li><p>Add the following to _my<em>module.info.yml</em> in the <code>dependencies</code> array:
+  <code>`</code>yaml
+  drupal:ez_multipart_mail
+  <code>`</code></p>
+</li>
+<li>Back at the <strong>root-level</strong> run <code>composer update my_module</code></li>
+</ul>
+<hr />
+<h3>Enable This Extension</h3>
+<ul>
+<li>Re-build Drupal caches, if necessary.</li>
+<li>Enable this extension, e.g.,<pre><code class="shell">drush pm-install ez_multipart_mail
+</code></pre>
+</li>
+</ul>
 <h2>Quick Start</h2>
 <ol>
 <li>Configure <a href="https://www.drupal.org/project/htmlmail">HTML Mail module</a> as necessary to successfully send HTML mails.</li>
@@ -182,7 +213,7 @@ $message['body'] = [
               Version:
         <strong>0.3.4</strong>
         &bull;
-                    Last Update: <strong>11/22/2024</strong>
+                    Last Update: <strong>12/9/2024</strong>
           </div>
   </footer>
 
